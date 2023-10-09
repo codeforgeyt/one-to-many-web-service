@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/carts")
+
 public class CartController {
 
     private final CartService cartService;
@@ -23,46 +23,46 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping
+   @RequestMapping(value = "/postcarts", method = RequestMethod.Post, produces = "application/json") 
     public ResponseEntity<CartDto> addCart(@RequestBody final CartDto cartDto){
         Cart cart = cartService.addCart(Cart.from(cartDto));
         return new ResponseEntity<>(CartDto.from(cart), HttpStatus.OK);
     }
 
-    @GetMapping
+   @RequestMapping(value = "/getcarts", method = RequestMethod.Get, produces = "application/json") 
     public ResponseEntity<List<CartDto>> getCarts(){
         List<Cart> carts = cartService.getCarts();
         List<CartDto> cartsDto = carts.stream().map(CartDto::from).collect(Collectors.toList());
         return new ResponseEntity<>(cartsDto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "{id}")
+   @RequestMapping(value = "/getcarts/{id}", method = RequestMethod.Get, produces = "application/json") 
     public ResponseEntity<CartDto> getCart(@PathVariable final Long id){
         Cart cart = cartService.getCart(id);
         return new ResponseEntity<>(CartDto.from(cart), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "{id}")
+   @RequestMapping(value = "/Deletecarts/{id}", method = RequestMethod.Delete, produces = "application/json") 
     public ResponseEntity<CartDto> deleteCart(@PathVariable final Long id){
         Cart cart = cartService.deleteCart(id);
         return new ResponseEntity<>(CartDto.from(cart), HttpStatus.OK);
     }
 
-    @PutMapping(value = "{id}")
+   @RequestMapping(value = "/updatecarts/{id}", method = RequestMethod.Put, produces = "application/json") 
     public ResponseEntity<CartDto> editCart(@PathVariable final Long id,
                                             @RequestBody final CartDto cartDto){
         Cart cart = cartService.editCart(id, Cart.from(cartDto));
         return new ResponseEntity<>(CartDto.from(cart), HttpStatus.OK);
     }
 
-    @PostMapping(value = "{cartId}/items/{itemId}/add")
+     @RequestMapping(value = "{cartId}/items/{itemId}/add", method = RequestMethod.Post, produces = "application/json") 
     public ResponseEntity<CartDto> addItemToCart(@PathVariable final Long cartId,
                                                  @PathVariable final Long itemId){
         Cart cart = cartService.addItemToCart(cartId, itemId);
         return new ResponseEntity<>(CartDto.from(cart), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "{cartId}/items/{itemId}/remove")
+    @RequestMapping(value = "{cartId}/items/{itemId}/remove", method = RequestMethod.Delete, produces = "application/json") 
     public ResponseEntity<CartDto> removeItemFromCart(@PathVariable final Long cartId,
                                                  @PathVariable final Long itemId){
         Cart cart = cartService.removeItemFromCart(cartId, itemId);
